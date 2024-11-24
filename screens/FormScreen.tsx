@@ -1,7 +1,6 @@
-//path: savings-tracker\screens\FormScreen.tsx
-import { SavingsContext } from "../contexts/SavingsContext";
 import React, { useContext, useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { SavingsContext } from "../contexts/SavingsContext";
+import { Button, StyleSheet, Text, TextInput, View, Alert } from "react-native";
 
 const FormScreen = ({ navigation }: any) => {
   const context = useContext(SavingsContext);
@@ -14,7 +13,7 @@ const FormScreen = ({ navigation }: any) => {
 
   const handleSetGoal = () => {
     if (!goalName || !targetAmount) {
-      alert("Please fill in both fields to set your goal.");
+      Alert.alert("Missing Fields", "Please fill in both fields to set your goal.");
       return;
     }
     setGoal(goalName, parseFloat(targetAmount));
@@ -23,7 +22,7 @@ const FormScreen = ({ navigation }: any) => {
 
   const handleUpdateSavings = () => {
     if (!savedAmount || parseFloat(savedAmount) <= 0) {
-      alert("Please enter a valid amount to add to your savings.");
+      Alert.alert("Invalid Amount", "Please enter a valid amount to add to your savings.");
       return;
     }
     updateSavings(parseFloat(savedAmount));
@@ -32,11 +31,14 @@ const FormScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Savings Tracker</Text>
+      
       <TextInput
         placeholder="Goal Name"
         style={styles.input}
         value={goalName}
         onChangeText={setGoalName}
+        placeholderTextColor="#999"
       />
       <TextInput
         placeholder="Target Amount"
@@ -44,26 +46,70 @@ const FormScreen = ({ navigation }: any) => {
         value={targetAmount}
         keyboardType="numeric"
         onChangeText={setTargetAmount}
+        placeholderTextColor="#999"
       />
-      <Button title="Set Goal" onPress={handleSetGoal} />
-      <View style={{ alignItems: "center", marginVertical: 16 }}>
-        <Text>OR</Text>
+      
+      <View style={styles.buttonContainer}>
+        <Button title="Set Goal" onPress={handleSetGoal} color="#007BFF" />
       </View>
+      
+      <View style={styles.dividerContainer}>
+        <Text style={styles.dividerText}>OR</Text>
+      </View>
+      
       <TextInput
         placeholder="Add Saved Amount"
         style={styles.input}
         value={savedAmount}
         keyboardType="numeric"
         onChangeText={setSavedAmount}
+        placeholderTextColor="#999"
       />
-      <Button title="Update Savings" onPress={handleUpdateSavings} />
+      
+      <View style={styles.buttonContainer}>
+        <Button title="Update Savings" onPress={handleUpdateSavings} color="#28A745" />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  input: { borderWidth: 1, padding: 8, marginVertical: 8, borderRadius: 4 },
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#F8F9FA",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 24,
+    color: "#343A40",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#CED4DA",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: 12,
+    marginVertical: 10,
+    fontSize: 16,
+    color: "#495057",
+  },
+  buttonContainer: {
+    marginVertical: 10,
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  dividerContainer: {
+    alignItems: "center",
+    marginVertical: 16,
+  },
+  dividerText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#6C757D",
+  },
 });
 
 export default FormScreen;
